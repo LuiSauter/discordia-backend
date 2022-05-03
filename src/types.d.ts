@@ -1,13 +1,3 @@
-import { Visibility, Weather } from './enums'
-
-export interface DiaryEntry {
-  id: number
-  date: string
-  weather: Weather
-  visibility: Visibility
-  comment: string
-}
-
 export interface User {
   username: string
   email: string
@@ -37,7 +27,7 @@ export interface Message {
   author: string
   channelId: string
 }
-
+/** other method ignore in typescript */
 // export type NonSensitiveInfoDiaryEntry = Pick<DiaryEntry, 'id' | 'date' | 'weather' | 'visibility'>
-export type NonSensitiveInfoDiaryEntry = Omit<DiaryEntry, 'comment'>
-export type NewDiaryEntry = Omit<DiaryEntry, 'id'>
+// export type NonSensitiveInfoMessage = Omit<Message, 'comment'>
+// export type NewMessageEntry = Omit<DiaryEntry, 'id'>
