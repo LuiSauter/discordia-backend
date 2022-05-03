@@ -35,6 +35,7 @@ export interface Channel {
 export interface Message {
   message: string
   author: string
+  channelId: string
 }
 
 // export type NonSensitiveInfoDiaryEntry = Pick<DiaryEntry, 'id' | 'date' | 'weather' | 'visibility'>

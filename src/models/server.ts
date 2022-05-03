@@ -19,6 +19,6 @@ const serverSchema = new Schema<Server>({
     required: true,
     type: [String]
   }
-})
+}, { timestamps: true })
 
 export default model<Server>('Server', serverSchema)

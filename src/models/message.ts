@@ -1,15 +1,22 @@
-import { Schema, model, Document } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import { Message } from '../types'
 
-const messageSchema = new Schema<Message | Document>({
-  message: {
-    required: true,
-    type: String
+const messageSchema = new Schema<Message>(
+  {
+    message: {
+      required: true,
+      type: String
+    },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    channelId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Channel'
+    }
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }
-})
+  { timestamps: true }
+)
 
-export default model<Message | Document>('Message', messageSchema)
+export default model<Message>('Message', messageSchema)

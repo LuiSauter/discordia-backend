@@ -5,7 +5,8 @@ const userSchema = new Schema<User>({
   username: {
     required: true,
     type: String,
-    trim: true
+    trim: true,
+    unique: true
   },
   email: {
     required: true,
@@ -23,8 +24,6 @@ const userSchema = new Schema<User>({
     ref: 'Channel'
   }],
   servers: [String]
-}, {
-  timestamps: true
-})
+}, { timestamps: true })
 
 export default model<User>('User', userSchema)
