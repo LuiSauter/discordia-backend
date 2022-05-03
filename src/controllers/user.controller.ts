@@ -1,32 +1,35 @@
 import { RequestHandler } from 'express'
 import UserModel from '../models/user'
-import { User } from '../types'
 
 export const login: RequestHandler = async (req, res) => {
-  const newUser = new UserModel(req.body)
-  const savedUser = await newUser.save()
-  return res.status(201).json({ status: 'signin', savedUser })
+  const isUser = await UserModel.findOne({ email: req.body.email })
+  if (isUser === null) {
+    try {
+      const newUser = new UserModel(req.body)
+      await newUser.save()
+      res.status(201).json({ status: 'Successful registration' })
+    } catch (error) {
+      console.error(Error)
+      res.sendStatus(406)
+    }
+  } else {
+    res.status(202).json({ status: 'Login successfully' })
+  }
 }
 
 export const getUser: RequestHandler = async (req, res) => {
-  const user = await UserModel.findOne({
-    username: req.params.username
-  }).populate('channels')
-  return res.status(200).json(user)
+  try {
+    const user = await UserModel.findOne({
+      username: req.params.username
+    }).populate('channels')
+    res.status(200).json(user)
+  } catch (error) {
+    console.error(Error)
+    res.sendStatus(406)
+  }
 }
 
 export const getAllUsers: RequestHandler = async (_req, res) => {
   const users = await UserModel.find({}).select('username photoUrl createdAt channels')
   return res.status(200).json(users)
-}
-
-export const deleteChannel: RequestHandler = async (req, res) => {
-  const { userId, channelId } = req.params
-  const user = await UserModel.findById(userId)
-  const filterChannels: User | any = user?.channels.filter(
-    (channel: string) => channel.toString() !== channelId
-  )
-  console.log(filterChannels)
-  await UserModel.findByIdAndUpdate(userId, { channels: filterChannels }, { new: true })
-  res.sendStatus(202)
 }
