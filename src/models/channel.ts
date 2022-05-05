@@ -11,12 +11,10 @@ const channelSchema = new Schema<Channel>({
     ref: 'Server'
   },
   section: String,
-  messages: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Message'
-    }
-  ],
+  messages: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Message'
+  }],
   owner: [
     {
       type: Schema.Types.ObjectId,

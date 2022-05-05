@@ -15,10 +15,11 @@ const serverSchema = new Schema<Server>({
     required: true,
     type: [String]
   },
-  channels: {
+  channels: [{
     required: true,
-    type: [String]
-  }
+    type: Schema.Types.ObjectId,
+    ref: 'Channel'
+  }]
 }, { timestamps: true })
 
 export default model<Server>('Server', serverSchema)
