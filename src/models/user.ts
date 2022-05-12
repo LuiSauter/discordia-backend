@@ -23,7 +23,10 @@ const userSchema = new Schema<User>({
     type: Schema.Types.ObjectId,
     ref: 'Channel'
   }],
-  servers: [String]
+  servers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Server'
+  }]
 }, { timestamps: true })
 
 export default model<User>('User', userSchema)

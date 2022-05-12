@@ -7,10 +7,10 @@ const serverSchema = new Schema<Server>({
     type: String,
     trim: true
   },
-  users: {
+  users: [{
     required: true,
-    type: [String]
-  },
+    type: Schema.Types.ObjectId,
+  }],
   rols: {
     required: true,
     type: [String]
