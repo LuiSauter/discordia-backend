@@ -5,41 +5,13 @@ import UserModel from '../models/user'
 import { Channel, User } from '../types'
 
 export const getAllChannel: RequestHandler = async (_req, res) => {
-  const allChannels = await ChannelModel.find({}).populate('owner')
+  const allChannels = await ChannelModel.find({})
   res.status(200).json(allChannels)
 }
 
 export const getChannel: RequestHandler = async (req, res) => {
   const channel = await ChannelModel.findById(req.params.id).populate('messages owner')
   res.status(200).json(channel)
-}
-
-export const createChannel: RequestHandler = async (_req, res) => {
-  // const { myId, yourId } = req.params
-  // const { message } = req.body
-  // const channelExists = await ChannelModel.findOne({ owner: [myId, yourId] })
-  // if (channelExists === null) {
-  //   try {
-  //     const newChannel = await ChannelModel.create({ ...req.body, owner: [myId, yourId] })
-  //     await newChannel.save()
-  //     const sendMessage = new MessageModel({ message: message, author: myId, channelId: newChannel._id })
-  //     await sendMessage.save()
-  //     await UserModel.findByIdAndUpdate(myId, {
-  //       $push: { channels: newChannel._id }
-  //     })
-  //     await UserModel.findByIdAndUpdate(yourId, {
-  //       $push: { channels: newChannel._id }
-  //     })
-  //     await ChannelModel.findByIdAndUpdate(newChannel._id, { messages: [sendMessage._id] }, { new: true })
-  //     res.status(200).json({ status: 'channel created successfully!' })
-  //   } catch (error) {
-  //     console.error(error)
-  //     res.sendStatus(406)
-  //   }
-  // } else {
-  //   res.sendStatus(406)
-  // }
-  res.sendStatus(200)
 }
 
 export const deleteChannel: RequestHandler = async (req, res) => {

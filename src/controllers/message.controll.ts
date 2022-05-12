@@ -4,13 +4,12 @@ import ChannelModel from '../models/channel'
 import UserModel from '../models/user'
 
 export const getAllMessages: RequestHandler = async (_req, res) => {
-  const allMessages = await MessageModel.find({}).populate('author')
+  const allMessages = await MessageModel.find({})
   res.status(200).json(allMessages)
 }
 
 export const createMessage: RequestHandler = async (req, res) => {
   const { message, myId, yourId, channelId } = req.body
-  // const isExistChannel = await ChannelModel.findById(channelId)
   if (channelId === undefined) {
     try {
       // create channel
@@ -47,14 +46,17 @@ export const createMessage: RequestHandler = async (req, res) => {
 }
 
 export const deleteMessage: RequestHandler = async (req, res) => {
-  try {
-    const channel = await ChannelModel.findById(req.params.channelId)
-    const filter = { messages: channel?.messages.filter((msgId: string) => msgId.toString() !== req.params.msgId) }
-    await ChannelModel.findByIdAndUpdate(req.params.channelId, filter, { new: true })
-    await MessageModel.findByIdAndDelete(req.params.msgId)
-    res.status(202)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(406)
-  }
+  const isExistMsg = await MessageModel.findById(req.params.msgId)
+  if (isExistMsg !== null) {
+    try {
+      const channel = await ChannelModel.findById(req.params.channelId)
+      const filter = channel?.messages.filter((msgId: string) => msgId.toString() !== req.params.msgId)
+      await ChannelModel.findByIdAndUpdate(req.params.channelId, {messages: filter}, { new: true })
+      await MessageModel.findByIdAndDelete(req.params.msgId)
+      res.sendStatus(202)
+    } catch (error) {
+      console.log(error)
+      res.sendStatus(406)
+    }
+  } else res.sendStatus(400)
 }
