@@ -5,17 +5,19 @@
   "main": "index.js",
   "engines": {
     "node": "18.x"
-  },""""""""
+  },
   "scripts": {
-    "dev": "NODE_ENV=development ts-node-dev src/index.ts",
-    "start": "NODE_ENV=production node build/index.js",
+    "dev": "ts-node-dev src/index.ts",
+    "start": "node build/index.js",
     "lint": "ts-standard",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "co": "sui-mono commit"
   },
   "keywords": [
-    "node", "heroku", "express"
+    "node",
+    "heroku",
+    "express"
   ],
   "author": "",
   "license": "MIT",

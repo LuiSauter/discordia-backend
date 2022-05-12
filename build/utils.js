@@ -1,3 +1,4 @@
+"use strict";
 /*
   const parseComment = (commentFromRequest: any): string => {
   if (!isString(commentFromRequest)) {
