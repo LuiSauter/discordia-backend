@@ -6,7 +6,6 @@
   "engines": {
     "node": "18.x"
   },
-  "type": "module",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "start": "node build/index.js",
