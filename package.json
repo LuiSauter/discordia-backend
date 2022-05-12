@@ -1,10 +1,10 @@
 {
   "name": "discordia-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple backend node.js for discord clone, only practices.",
   "main": "index.js",
   "engines": {
-    "node": "18.1.0"
+    "node": "18.x"
   },""""""""
   "scripts": {
     "dev": "NODE_ENV=development ts-node-dev src/index.ts",
@@ -14,9 +14,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "co": "sui-mono commit"
   },
-  "keywords": [],
+  "keywords": [
+    "node", "heroku", "express"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@s-ui/mono": "2.26.0",
     "@types/cors": "2.8.12",
