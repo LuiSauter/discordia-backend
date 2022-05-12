@@ -14,7 +14,7 @@ export const getChannel: RequestHandler = async (req, res) => {
   res.status(200).json(channel)
 }
 
-export const createChannel: RequestHandler = async (req, res) => {
+export const createChannel: RequestHandler = async (_req, res) => {
   // const { myId, yourId } = req.params
   // const { message } = req.body
   // const channelExists = await ChannelModel.findOne({ owner: [myId, yourId] })
