@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "18.1.0"
+  },""""""""
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
-    "start": "node build/index.js",
+    "dev": "NODE_ENV=development ts-node-dev src/index.ts",
+    "start": "NODE_ENV=production node build/index.js",
     "lint": "ts-standard",
-    "tsc": "tsc",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "co": "sui-mono commit"
   },
