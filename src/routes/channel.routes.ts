@@ -15,8 +15,6 @@ router.get('/', channelCtrl.getAllChannel)
 
 router.get('/:id', channelCtrl.getChannel)
 
-router.post('/:myId/:yourId', channelCtrl.createChannel)
-
 router.delete('/:userId/:channelId', channelCtrl.deleteChannel)
 
 export default router
