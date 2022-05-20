@@ -1,3 +1,5 @@
+import { Section } from './enums'
+
 export interface User {
   username: string
   email: string
@@ -10,14 +12,14 @@ export interface User {
 export interface Server {
   serverName: string
   users: string[]
-  rols: string[]
+  admin: string[]
   channels: string[]
 }
 
 export interface Channel {
   serverId: string
   channelName: string
-  section: string
+  section: Section
   messages: string[]
   owner: string[]
 }
