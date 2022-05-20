@@ -10,10 +10,12 @@ const serverSchema = new Schema<Server>({
   users: [{
     required: true,
     type: Schema.Types.ObjectId,
+    ref: 'User'
   }],
-  rols: {
+  admin: {
     required: true,
-    type: [String]
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   },
   channels: [{
     required: true,
