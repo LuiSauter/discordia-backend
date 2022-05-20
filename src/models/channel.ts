@@ -18,8 +18,7 @@ const channelSchema = new Schema<Channel>({
   owner: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'User',
-      unique: true
+      ref: 'User'
     }
   ]
 }, { timestamps: true })
