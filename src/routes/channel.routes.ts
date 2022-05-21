@@ -10,6 +10,8 @@ router.post('/msg', messageCtrl.createMessage)
 
 router.delete('/msg/:msgId/:channelId', messageCtrl.deleteMessage)
 
+router.get('/test', messageCtrl.test)
+
 // Channel
 router.get('/', channelCtrl.getAllChannel)
 
