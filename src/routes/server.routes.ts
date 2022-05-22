@@ -4,6 +4,8 @@ const router = Router()
 
 router.post('/add', serverCtrl.createServer)
 
+router.post('/invite/:serverId/:userId/', serverCtrl.invitation)
+
 router.get('/', serverCtrl.allServers)
 
 router.get('/:id', serverCtrl.getServer)

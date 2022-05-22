@@ -2,6 +2,7 @@ import { RequestHandler } from 'express'
 import ServerModel from '../models/server'
 import ChannelModel from '../models/channel'
 import UserModel from '../models/user'
+import MessageModel from '../models/message'
 
 export const allServers: RequestHandler = async (_req, res) => {
   try {
@@ -73,12 +74,45 @@ export const createServer: RequestHandler = async (req, res) => {
   }
 }
 
+export const invitation: RequestHandler = async (req, res) => {
+  try {
+    const { serverId, userId } = req.params
+    const isExistServer = await ServerModel.findById(serverId)
+    const isExistUser = await UserModel.findById(userId)
+    if (isExistServer !== null && isExistUser !== null) {
+      await UserModel.findByIdAndUpdate(userId, {
+        $push: { servers: serverId }
+      })
+      await ServerModel.findByIdAndUpdate(serverId, {
+        $push: { users: userId }
+      })
+      console.log({ serverId, userId })
+      res.sendStatus(202)
+    } else {
+      res.sendStatus(406)
+    }
+  } catch (error) {
+    res.sendStatus(406)
+  }
+}
+
 export const deleteServer: RequestHandler = async (req, res) => {
   try {
-    const findServer = await ServerModel.findById(req.params.serverId)
-    await ChannelModel.deleteMany({ _id: { $in: findServer?.channels } })
-    await ServerModel.findByIdAndDelete(req.params.serverId)
-    res.sendStatus(200)
+    const { myId, serverId } = req.params
+    const findServer = await ServerModel.findById(serverId)
+    if (findServer?.admin.toString() === myId) {
+      // Delete all channelId of messages
+      await MessageModel.deleteMany({ channelId: { $in: findServer?.channels } })
+      // Delete all ids channel of server
+      await ChannelModel.deleteMany({ _id: { $in: findServer?.channels } })
+      // remove all ids of users on arrays servers
+      await UserModel.updateMany({}, { $pull: { servers: serverId } })
+      // Delete server
+      await ServerModel.findByIdAndDelete(serverId)
+      res.sendStatus(202)
+    } else {
+      res.sendStatus(406)
+    }
   } catch (error) {
     res.sendStatus(406)
   }
