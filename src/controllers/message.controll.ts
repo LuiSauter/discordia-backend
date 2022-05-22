@@ -20,8 +20,8 @@ export const getAllMessages: RequestHandler = async (_req, res) => {
 }
 
 export const createMessage: RequestHandler = async (req, res) => {
-  const { message, myId, yourId, channelId } = req.body
-  if (channelId === undefined) {
+  const { message, myId, yourId, channelId, serverId } = req.body
+  if (channelId === undefined && serverId === undefined) {
     try {
       const isExist = await ChannelModel.findOne({ owner: [myId, yourId] })
       if (isExist === null) {
@@ -69,6 +69,8 @@ export const createMessage: RequestHandler = async (req, res) => {
         const filter = { $push: { messages: newMessage._id } }
         await ChannelModel.findByIdAndUpdate(channelId, filter)
         res.sendStatus(201)
+      } else {
+        res.sendStatus(406)
       }
     } catch (error) {
       res.sendStatus(406)
