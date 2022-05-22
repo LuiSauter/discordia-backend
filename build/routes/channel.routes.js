@@ -31,6 +31,7 @@ const router = (0, express_1.Router)();
 router.get('/msg', messageCtrl.getAllMessages);
 router.post('/msg', messageCtrl.createMessage);
 router.delete('/msg/:msgId/:channelId', messageCtrl.deleteMessage);
+router.get('/test', messageCtrl.test);
 // Channel
 router.get('/', channelCtrl.getAllChannel);
 router.get('/:id', channelCtrl.getChannel);

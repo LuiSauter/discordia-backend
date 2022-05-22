@@ -22,7 +22,12 @@ const getAllChannel = (_req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getAllChannel = getAllChannel;
 const getChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const channel = yield channel_1.default.findById(req.params.id).populate('messages owner');
+    const channel = yield channel_1.default.findById(req.params.id)
+        .populate({
+        path: 'messages',
+        populate: { path: 'author' }
+    })
+        .populate('owner');
     res.status(200).json(channel);
 });
 exports.getChannel = getChannel;

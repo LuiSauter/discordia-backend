@@ -36,7 +36,7 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_1.default.findOne({
             username: req.params.username
-        }).populate('channels');
+        }).populate('channels servers');
         res.status(200).json(user);
     }
     catch (error) {

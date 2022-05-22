@@ -18,8 +18,7 @@ const channelSchema = new mongoose_1.Schema({
     owner: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'User',
-            unique: true
+            ref: 'User'
         }
     ]
 }, { timestamps: true });

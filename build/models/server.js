@@ -10,10 +10,12 @@ const serverSchema = new mongoose_1.Schema({
     users: [{
             required: true,
             type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'User'
         }],
-    rols: {
+    admin: {
         required: true,
-        type: [String]
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User'
     },
     channels: [{
             required: true,
