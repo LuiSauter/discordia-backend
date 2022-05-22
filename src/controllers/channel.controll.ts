@@ -10,7 +10,12 @@ export const getAllChannel: RequestHandler = async (_req, res) => {
 }
 
 export const getChannel: RequestHandler = async (req, res) => {
-  const channel = await ChannelModel.findById(req.params.id).populate('messages owner')
+  const channel = await ChannelModel.findById(req.params.id)
+    .populate({
+      path: 'messages',
+      populate: { path: 'author' }
+    })
+    .populate('owner')
   res.status(200).json(channel)
 }
 
