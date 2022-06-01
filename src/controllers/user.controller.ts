@@ -21,7 +21,12 @@ export const getUser: RequestHandler = async (req, res) => {
   try {
     const user = await UserModel.findOne({
       username: req.params.username
-    }).populate('channels servers')
+    })
+      .populate({
+        path: 'channels',
+        populate: { path: 'owner', select: 'username photoUrl' }
+      })
+      .populate('servers')
     res.status(200).json(user)
   } catch (error) {
     console.error(Error)
