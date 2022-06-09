@@ -24,12 +24,14 @@ export const getServer: RequestHandler = async (req, res) => {
 
 export const createServer: RequestHandler = async (req, res) => {
   try {
+    const { serverName, userId, image } = req.body
     console.log(req.body)
     const newServer = await ServerModel.create({
-      serverName: req.body.serverName,
-      users: [req.body.user],
-      admin: req.body.user,
-      channels: []
+      serverName,
+      users: [userId],
+      admin: userId,
+      channels: [],
+      image
     })
     await newServer.save()
     const defaultChannelOne = await ChannelModel.create({
@@ -37,7 +39,7 @@ export const createServer: RequestHandler = async (req, res) => {
       serverId: newServer._id,
       section: 'información',
       messages: [],
-      owner: [req.body.user]
+      owner: [userId]
     })
     await defaultChannelOne.save()
     const defaultChannelTwo = await ChannelModel.create({
@@ -45,7 +47,7 @@ export const createServer: RequestHandler = async (req, res) => {
       serverId: newServer._id,
       section: 'canales de texto',
       messages: [],
-      owner: [req.body.user]
+      owner: [userId]
     })
     await defaultChannelTwo.save()
 
@@ -54,7 +56,7 @@ export const createServer: RequestHandler = async (req, res) => {
       serverId: newServer._id,
       section: 'canales de voz',
       messages: [],
-      owner: [req.body.user]
+      owner: [userId]
     })
     await defaultChannelThree.save()
     const update = {
@@ -62,7 +64,7 @@ export const createServer: RequestHandler = async (req, res) => {
         channels: [defaultChannelOne._id, defaultChannelTwo._id, defaultChannelThree._id]
       }
     }
-    await UserModel.findByIdAndUpdate(req.body.user, {
+    await UserModel.findByIdAndUpdate(userId, {
       $push: { servers: [newServer._id] }
     })
     await ServerModel.findByIdAndUpdate(newServer._id, update)
