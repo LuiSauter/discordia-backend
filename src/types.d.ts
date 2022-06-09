@@ -12,8 +12,9 @@ export interface User {
 export interface Server {
   serverName: string
   users: string[]
-  admin: string[]
+  admin: string
   channels: string[]
+  image: string
 }
 
 export interface Channel {
