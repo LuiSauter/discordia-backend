@@ -26,7 +26,10 @@ export const getUser: RequestHandler = async (req, res) => {
         path: 'channels',
         populate: { path: 'owner', select: 'username photoUrl' }
       })
-      .populate('servers')
+      .populate({
+        path: 'servers',
+        populate: { path: 'channels', select: 'channelName section serverId' }
+      })
     res.status(200).json(user)
   } catch (error) {
     console.error(Error)
