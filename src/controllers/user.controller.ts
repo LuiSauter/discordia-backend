@@ -38,6 +38,13 @@ export const getUser: RequestHandler = async (req, res) => {
 }
 
 export const getAllUsers: RequestHandler = async (_req, res) => {
-  const users = await UserModel.find({}).select('username photoUrl createdAt channels')
-  return res.status(200).json(users)
+  try {
+    const users = await UserModel.find({}).select(
+      'username photoUrl createdAt channels'
+    )
+    res.status(200).json(users)
+  } catch (error) {
+    console.error(error)
+    res.sendStatus(204)
+  }
 }

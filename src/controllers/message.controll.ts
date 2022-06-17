@@ -79,17 +79,27 @@ export const createMessage: RequestHandler = async (req, res) => {
 }
 
 export const deleteMessage: RequestHandler = async (req, res) => {
-  const isExistMsg = await MessageModel.findById(req.params.msgId)
-  if (isExistMsg !== null) {
-    try {
-      const channel = await ChannelModel.findById(req.params.channelId)
-      const filter = channel?.messages.filter((msgId: string) => msgId.toString() !== req.params.msgId)
-      await ChannelModel.findByIdAndUpdate(req.params.channelId, { messages: filter }, { new: true })
-      await MessageModel.findByIdAndDelete(req.params.msgId)
-      res.sendStatus(202)
-    } catch (error) {
-      console.log(error)
-      res.sendStatus(406)
-    }
-  } else res.sendStatus(400)
+  try {
+    const isExistMsg = await MessageModel.findById(req.params.msgId)
+    if (isExistMsg !== null) {
+      try {
+        const channel = await ChannelModel.findById(req.params.channelId)
+        const filter = channel?.messages.filter(
+          (msgId: string) => msgId.toString() !== req.params.msgId
+        )
+        await ChannelModel.findByIdAndUpdate(
+          req.params.channelId,
+          { messages: filter },
+          { new: true }
+        )
+        await MessageModel.findByIdAndDelete(req.params.msgId)
+        res.sendStatus(202)
+      } catch (error) {
+        console.log(error)
+        res.sendStatus(406)
+      }
+    } else res.sendStatus(400)
+  } catch (error) {
+    res.sendStatus(406)
+  }
 }
