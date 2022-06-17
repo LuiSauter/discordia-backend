@@ -94,21 +94,26 @@ const createMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.createMessage = createMessage;
 const deleteMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const isExistMsg = yield message_1.default.findById(req.params.msgId);
-    if (isExistMsg !== null) {
-        try {
-            const channel = yield channel_1.default.findById(req.params.channelId);
-            const filter = channel === null || channel === void 0 ? void 0 : channel.messages.filter((msgId) => msgId.toString() !== req.params.msgId);
-            yield channel_1.default.findByIdAndUpdate(req.params.channelId, { messages: filter }, { new: true });
-            yield message_1.default.findByIdAndDelete(req.params.msgId);
-            res.sendStatus(202);
+    try {
+        const isExistMsg = yield message_1.default.findById(req.params.msgId);
+        if (isExistMsg !== null) {
+            try {
+                const channel = yield channel_1.default.findById(req.params.channelId);
+                const filter = channel === null || channel === void 0 ? void 0 : channel.messages.filter((msgId) => msgId.toString() !== req.params.msgId);
+                yield channel_1.default.findByIdAndUpdate(req.params.channelId, { messages: filter }, { new: true });
+                yield message_1.default.findByIdAndDelete(req.params.msgId);
+                res.sendStatus(202);
+            }
+            catch (error) {
+                console.log(error);
+                res.sendStatus(406);
+            }
         }
-        catch (error) {
-            console.log(error);
-            res.sendStatus(406);
-        }
+        else
+            res.sendStatus(400);
     }
-    else
-        res.sendStatus(400);
+    catch (error) {
+        res.sendStatus(406);
+    }
 });
 exports.deleteMessage = deleteMessage;

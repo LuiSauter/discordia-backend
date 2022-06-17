@@ -39,12 +39,14 @@ const getServer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getServer = getServer;
 const createServer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { serverName, userId, image } = req.body;
         console.log(req.body);
         const newServer = yield server_1.default.create({
-            serverName: req.body.serverName,
-            users: [req.body.user],
-            admin: req.body.user,
-            channels: []
+            serverName,
+            users: [userId],
+            admin: userId,
+            channels: [],
+            image
         });
         yield newServer.save();
         const defaultChannelOne = yield channel_1.default.create({
@@ -52,7 +54,7 @@ const createServer = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             serverId: newServer._id,
             section: 'información',
             messages: [],
-            owner: [req.body.user]
+            owner: [userId]
         });
         yield defaultChannelOne.save();
         const defaultChannelTwo = yield channel_1.default.create({
@@ -60,7 +62,7 @@ const createServer = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             serverId: newServer._id,
             section: 'canales de texto',
             messages: [],
-            owner: [req.body.user]
+            owner: [userId]
         });
         yield defaultChannelTwo.save();
         const defaultChannelThree = yield channel_1.default.create({
@@ -68,7 +70,7 @@ const createServer = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             serverId: newServer._id,
             section: 'canales de voz',
             messages: [],
-            owner: [req.body.user]
+            owner: [userId]
         });
         yield defaultChannelThree.save();
         const update = {
@@ -76,7 +78,7 @@ const createServer = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 channels: [defaultChannelOne._id, defaultChannelTwo._id, defaultChannelThree._id]
             }
         };
-        yield user_1.default.findByIdAndUpdate(req.body.user, {
+        yield user_1.default.findByIdAndUpdate(userId, {
             $push: { servers: [newServer._id] }
         });
         yield server_1.default.findByIdAndUpdate(newServer._id, update);

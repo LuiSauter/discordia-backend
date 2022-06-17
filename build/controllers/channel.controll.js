@@ -22,22 +22,27 @@ const getAllChannel = (_req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getAllChannel = getAllChannel;
 const getChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const channel = yield channel_1.default.findById(req.params.id)
-        .populate({
-        path: 'messages',
-        populate: { path: 'author' }
-    })
-        .populate('owner');
-    res.status(200).json(channel);
+    try {
+        const channel = yield channel_1.default.findById(req.params.id)
+            .populate({
+            path: 'messages',
+            populate: { path: 'author' }
+        })
+            .populate('owner');
+        res.status(200).json(channel);
+    }
+    catch (error) {
+        res.sendStatus(406);
+    }
 });
 exports.getChannel = getChannel;
 const deleteChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, channelId } = req.params;
-    const user = yield user_1.default.findById(userId);
-    const channel = yield channel_1.default.findById(channelId);
-    if (user === null || channel === null)
-        res.sendStatus(406);
     try {
+        const user = yield user_1.default.findById(userId);
+        const channel = yield channel_1.default.findById(channelId);
+        if (user === null || channel === null)
+            res.sendStatus(406);
         const filterChannels = user === null || user === void 0 ? void 0 : user.channels.filter((channel) => channel.toString() !== channelId);
         const newOwner = channel === null || channel === void 0 ? void 0 : channel.owner.filter((ch) => ch.toString() !== userId);
         // delete userId of channel.owner

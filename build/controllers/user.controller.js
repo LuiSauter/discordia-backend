@@ -36,7 +36,15 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_1.default.findOne({
             username: req.params.username
-        }).populate('channels servers');
+        })
+            .populate({
+            path: 'channels',
+            populate: { path: 'owner', select: 'username photoUrl' }
+        })
+            .populate({
+            path: 'servers',
+            populate: { path: 'channels', select: 'channelName section serverId' }
+        });
         res.status(200).json(user);
     }
     catch (error) {
@@ -46,7 +54,13 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getUser = getUser;
 const getAllUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield user_1.default.find({}).select('username photoUrl createdAt channels');
-    return res.status(200).json(users);
+    try {
+        const users = yield user_1.default.find({}).select('username photoUrl createdAt channels');
+        res.status(200).json(users);
+    }
+    catch (error) {
+        console.error(error);
+        res.sendStatus(204);
+    }
 });
 exports.getAllUsers = getAllUsers;

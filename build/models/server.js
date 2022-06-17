@@ -7,20 +7,27 @@ const serverSchema = new mongoose_1.Schema({
         type: String,
         trim: true
     },
-    users: [{
+    users: [
+        {
             required: true,
             type: mongoose_1.Schema.Types.ObjectId,
             ref: 'User'
-        }],
+        }
+    ],
     admin: {
         required: true,
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User'
     },
-    channels: [{
-            required: true,
+    channels: [
+        {
             type: mongoose_1.Schema.Types.ObjectId,
             ref: 'Channel'
-        }]
+        }
+    ],
+    image: {
+        type: String,
+        required: true
+    }
 }, { timestamps: true });
 exports.default = (0, mongoose_1.model)('Server', serverSchema);
