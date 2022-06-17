@@ -10,21 +10,25 @@ export const getAllChannel: RequestHandler = async (_req, res) => {
 }
 
 export const getChannel: RequestHandler = async (req, res) => {
-  const channel = await ChannelModel.findById(req.params.id)
-    .populate({
-      path: 'messages',
-      populate: { path: 'author' }
-    })
-    .populate('owner')
-  res.status(200).json(channel)
+  try {
+    const channel = await ChannelModel.findById(req.params.id)
+      .populate({
+        path: 'messages',
+        populate: { path: 'author' }
+      })
+      .populate('owner')
+    res.status(200).json(channel)
+  } catch (error) {
+    res.sendStatus(406)
+  }
 }
 
 export const deleteChannel: RequestHandler = async (req, res) => {
   const { userId, channelId } = req.params
-  const user = await UserModel.findById(userId)
-  const channel = await ChannelModel.findById(channelId)
-  if (user === null || channel === null) res.sendStatus(406)
   try {
+    const user = await UserModel.findById(userId)
+    const channel = await ChannelModel.findById(channelId)
+    if (user === null || channel === null) res.sendStatus(406)
     const filterChannels: User | any = user?.channels.filter((channel: string) => channel.toString() !== channelId)
     const newOwner: Channel | any = channel?.owner.filter((ch: string) => ch.toString() !== userId)
     // delete userId of channel.owner
