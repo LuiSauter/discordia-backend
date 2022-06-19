@@ -14,7 +14,7 @@ export const getChannel: RequestHandler = async (req, res) => {
     const channel = await ChannelModel.findById(req.params.id)
       .populate({
         path: 'messages',
-        populate: { path: 'author' }
+        populate: { path: 'author', select: 'username photoUrl' }
       })
       .populate('owner')
     res.status(200).json(channel)
