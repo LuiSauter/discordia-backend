@@ -1,7 +1,7 @@
-import { RequestHandler } from 'express'
-import MessageModel from '../models/message'
-import ChannelModel from '../models/channel'
-import UserModel from '../models/user'
+import { RequestHandler } from "express"
+import MessageModel from "../models/message"
+import ChannelModel from "../models/channel"
+import UserModel from "../models/user"
 
 export const test: RequestHandler = async (req, res) => {
   const { myId, yourId } = req.body
@@ -32,16 +32,12 @@ export const createMessage: RequestHandler = async (req, res) => {
         const newMessage = new MessageModel({
           message: message,
           author: myId,
-          channelId: newChannel._id
+          channelId: newChannel._id,
         })
         await newMessage.save()
         // add channelId in users
-        await UserModel.findByIdAndUpdate(myId, {
-          $push: { channels: newChannel._id }
-        })
-        await UserModel.findByIdAndUpdate(yourId, {
-          $push: { channels: newChannel._id }
-        })
+        await UserModel.findByIdAndUpdate(myId, { $push: { channels: newChannel._id } })
+        await UserModel.findByIdAndUpdate(yourId, { $push: { channels: newChannel._id } })
         // add messages in new channel
         await ChannelModel.findByIdAndUpdate(
           newChannel._id,
@@ -63,7 +59,7 @@ export const createMessage: RequestHandler = async (req, res) => {
         const newMessage = new MessageModel({
           message,
           author: myId,
-          channelId
+          channelId,
         })
         await newMessage.save()
         const filter = { $push: { messages: newMessage._id } }
@@ -80,19 +76,14 @@ export const createMessage: RequestHandler = async (req, res) => {
 
 export const deleteMessage: RequestHandler = async (req, res) => {
   try {
-    const isExistMsg = await MessageModel.findById(req.params.msgId)
+    const { msgId, channelId } = req.params
+    const isExistMsg = await MessageModel.findById(msgId)
     if (isExistMsg !== null) {
       try {
-        const channel = await ChannelModel.findById(req.params.channelId)
-        const filter = channel?.messages.filter(
-          (msgId: string) => msgId.toString() !== req.params.msgId
-        )
-        await ChannelModel.findByIdAndUpdate(
-          req.params.channelId,
-          { messages: filter },
-          { new: true }
-        )
-        await MessageModel.findByIdAndDelete(req.params.msgId)
+        const channel = await ChannelModel.findById(channelId)
+        const filter = channel?.messages.filter((msgId: string) => msgId.toString() !== msgId)
+        await ChannelModel.findByIdAndUpdate(channelId,{ messages: filter },{ new: true })
+        await MessageModel.findByIdAndDelete(msgId)
         res.sendStatus(202)
       } catch (error) {
         console.log(error)
