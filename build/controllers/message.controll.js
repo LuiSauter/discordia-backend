@@ -46,15 +46,15 @@ const createMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 const newMessage = new message_1.default({
                     message: message,
                     author: myId,
-                    channelId: newChannel._id
+                    channelId: newChannel._id,
                 });
                 yield newMessage.save();
                 // add channelId in users
                 yield user_1.default.findByIdAndUpdate(myId, {
-                    $push: { channels: newChannel._id }
+                    $push: { channels: newChannel._id },
                 });
                 yield user_1.default.findByIdAndUpdate(yourId, {
-                    $push: { channels: newChannel._id }
+                    $push: { channels: newChannel._id },
                 });
                 // add messages in new channel
                 yield channel_1.default.findByIdAndUpdate(newChannel._id, { messages: [newMessage._id] }, { new: true });
@@ -76,7 +76,7 @@ const createMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 const newMessage = new message_1.default({
                     message,
                     author: myId,
-                    channelId
+                    channelId,
                 });
                 yield newMessage.save();
                 const filter = { $push: { messages: newMessage._id } };
@@ -95,13 +95,14 @@ const createMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createMessage = createMessage;
 const deleteMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const isExistMsg = yield message_1.default.findById(req.params.msgId);
+        const { msgId, channelId } = req.params;
+        const isExistMsg = yield message_1.default.findById(msgId);
         if (isExistMsg !== null) {
             try {
-                const channel = yield channel_1.default.findById(req.params.channelId);
-                const filter = channel === null || channel === void 0 ? void 0 : channel.messages.filter((msgId) => msgId.toString() !== req.params.msgId);
-                yield channel_1.default.findByIdAndUpdate(req.params.channelId, { messages: filter }, { new: true });
-                yield message_1.default.findByIdAndDelete(req.params.msgId);
+                const channel = yield channel_1.default.findById(channelId);
+                const filter = channel === null || channel === void 0 ? void 0 : channel.messages.filter((msgId) => msgId.toString() !== msgId);
+                yield channel_1.default.findByIdAndUpdate(channelId, { messages: filter }, { new: true });
+                yield message_1.default.findByIdAndDelete(msgId);
                 res.sendStatus(202);
             }
             catch (error) {

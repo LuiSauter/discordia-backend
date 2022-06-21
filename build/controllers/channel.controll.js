@@ -26,7 +26,7 @@ const getChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const channel = yield channel_1.default.findById(req.params.id)
             .populate({
             path: 'messages',
-            populate: { path: 'author' }
+            populate: { path: 'author', select: 'username photoUrl' }
         })
             .populate('owner');
         res.status(200).json(channel);
