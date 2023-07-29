@@ -35,7 +35,7 @@
     "dotenv": "16.0.1",
     "escape-string-regexp": "5.0.0",
     "express": "4.17.3",
-    "mongoose": "6.4.6"
+    "mongoose": "6.11.3"
   },
   "eslintConfig": {
     "parserOptions": {
